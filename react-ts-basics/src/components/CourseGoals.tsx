@@ -3,7 +3,7 @@ import { CourseGoalType } from '../types/CourseGoals'
 
 type CourseGoalProps = PropsWithChildren<CourseGoalType>
 
-function CourseGoals({title, description, children}: CourseGoalProps) {
+function CourseGoal({title, description, children, onDeleteGoal, id}: CourseGoalProps) {
   return (
     <article>
         <div>
@@ -12,9 +12,9 @@ function CourseGoals({title, description, children}: CourseGoalProps) {
             <p>{description}</p>
         </div>
 
-        <button>Delete</button>
+        <button onClick={() => onDeleteGoal(id)}>Delete</button>
     </article>
   )
 }
 
-export default CourseGoals
+export default CourseGoal

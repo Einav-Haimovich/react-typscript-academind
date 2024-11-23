@@ -1,24 +1,25 @@
 import React from "react";
-import { CourseGoalType } from '../types/CourseGoals';
-import CourseGoals from "./CourseGoals";
-
+import { CourseGoalType } from "../types/CourseGoals";
+import CourseGoal from "./CourseGoals";
 
 type CourseGoalListProps = {
   goals: CourseGoalType[];
+  onDeleteGoal: (goalId: number) => void;
 };
 
-function CourseGoalsList({ goals }: CourseGoalListProps) {
-
+function CourseGoalList({ goals, onDeleteGoal }: CourseGoalListProps) {
   return (
     <div>
       <ul>
         {!!goals &&
           goals.map((goal) => (
             <li key={goal.id}>
-              <CourseGoals
+              <CourseGoal
                 title={goal.title}
                 description={goal.description}
-              ></CourseGoals>
+                id={goal.id}
+                onDeleteGoal={onDeleteGoal}
+              ></CourseGoal>
             </li>
           ))}
       </ul>
@@ -26,4 +27,4 @@ function CourseGoalsList({ goals }: CourseGoalListProps) {
   );
 }
 
-export default CourseGoalsList;
+export default CourseGoalList;
