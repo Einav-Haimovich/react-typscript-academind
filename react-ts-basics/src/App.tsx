@@ -9,12 +9,12 @@ import NewGoal from "./components/NewGoal";
 function App() {
   const [courseGoals, setCourseGoals] = useState<CourseGoalType[]>([]);
 
-  function hanldeAddGoal() {
+  function hanldeAddGoal(goal: string, summary: string) {
     setCourseGoals((prevState) => {
       const newGoal = {
         id: Math.random(),
-        title: "My new goal",
-        description: "Description of my new goal",
+        title: goal,
+        description: summary,
         onDeleteGoal: handleDeleteGoal,
       };
       return [...prevState, newGoal];
@@ -35,9 +35,9 @@ function App() {
       </Header>
 
       {/* <button onClick={hanldeAddGoal}>Add Goal</button> */}
+      <NewGoal onAddGoal={hanldeAddGoal}/>
       <CourseGoalList goals={courseGoals} onDeleteGoal={handleDeleteGoal}/>
 
-      <NewGoal/>
     </main>
   );
 }
