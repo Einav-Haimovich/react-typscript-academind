@@ -1,15 +1,13 @@
 import { createContext, useContext, useReducer, type ReactNode } from "react";
 
-type Timer = {
+export type Timer = {
     name: string;
     duration: number;
 }
-
 type TimersState = {
     isRunning: boolean;
     timers: Timer[];
 };
-
 const initialState: TimersState = {
     isRunning: true,
     timers: [],
@@ -34,24 +32,55 @@ export function useTimersContext() {
 type TimersContextProviderProps = {
     children: ReactNode;
 };
+type StartTimerAction = {
+    type: 'START_TIMER';
+};
+type StopTimerAction = {
+    type: 'STOP_TIMER';
+};
+type AddTimersAction = {
+    type: 'ADD_TIMER';
+    payload: Timer;
+};
+type Action = StartTimerAction | StopTimerAction | AddTimersAction;
 
-type TimersAction = {
-    type: 'ADD_TIMER' | 'START_TIMER' | 'STOP_TIMER';
-}
-
-function timersReducer(state: TimersState, action: TimersAction): TimersState {
-
+function timersReducer(state: TimersState, action: Action): TimersState {
+    switch (action.type) {
+        case 'ADD_TIMER':
+            return {
+                ...state,
+                timers: [
+                    ...state.timers,
+                    {
+                        name: action.payload.name,
+                        duration: action.payload.duration,
+                    }
+                ],
+            };
+        case 'START_TIMER':
+            return {
+                ...state,
+                isRunning: true,
+            };
+        case 'STOP_TIMER':
+            return {
+                ...state,
+                isRunning: false,
+            };
+        default:
+            return state;
+    }
 }
 
 export default function TimersContextProvider({children}: TimersContextProviderProps) {
 
-    const [timerState, dispatch] = useReducer(timersReducer, initialState)
+    const [timersState, dispatch] = useReducer(timersReducer, initialState)
 
     const ctx: TimersContextValue = {
-        isRunning: false,
-        timers: [],
+        isRunning: timersState.isRunning,
+        timers: timersState.timers,
         addTimer: (timerData: Timer) => {
-            dispatch({type: 'ADD_TIMER', timerData});
+            dispatch({type: 'ADD_TIMER', payload: timerData});
         },
         startTimer: () => {
             dispatch({type: 'START_TIMER'});
